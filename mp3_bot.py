@@ -2,9 +2,7 @@ import os
 import yt_dlp
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
-
-BOT_TOKEN = '7776882043:AAG678rRPFlc90h6ZXVBO_I08nT1XSdotaQ'
-
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Send me a YouTube video link, and I'll convert it to MP3!")
 
@@ -28,11 +26,11 @@ async def convert(update: Update, context: ContextTypes.DEFAULT_TYPE):
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-          info = ydl.extract_info(url, download=True)
-          filename = ydl.prepare_filename(info).replace(".webm", ".mp3").replace(".m4a", ".mp3")
+            info = ydl.extract_info(url, download=True)
+            filename = ydl.prepare_filename(info).replace(".webm", ".mp3").replace(".m4a", ".mp3")
 
         with open(filename, 'rb') as audio:
-          await update.message.reply_audio(audio, caption='@valsy_bot')
+            await update.message.reply_audio(audio, caption='@valsy_bot')
 
         os.remove(filename)  # cleanup
 
